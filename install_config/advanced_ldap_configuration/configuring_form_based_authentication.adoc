@@ -54,9 +54,9 @@ the *LoadModule* line.
 +
 ====
 ----
- <Location /login-proxy/oauth/authorize>
+ <LocationMatch ^/login-proxy/oauth/authorize/?$>
   # Insert your backend server name/ip here.
-  ProxyPass https://openshift.example.com:8443/oauth/authorize
+  ProxyPass https://openshift.example.com:8443/oauth/authorize/
 
   InterceptFormPAMService openshift
   InterceptFormLogin httpd_username
@@ -64,6 +64,12 @@ the *LoadModule* line.
 
   RewriteCond %{REQUEST_METHOD} GET
   RewriteRule ^.*$ /login.html [L]
+</LocationMatch>
+
+<Location /login-proxy/oauth>
+  # Insert your backend server name/ip here.
+  ProxyPass https://openshift.example.com:8443/oauth/
+  Require valid-user
 </Location>
 ----
 ====

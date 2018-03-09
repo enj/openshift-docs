@@ -337,19 +337,19 @@ LoadModule lookup_identity_module modules/mod_lookup_identity.so
   RewriteCond %{HTTP:X-Csrf-Token} ^$ [NC]
   RewriteRule ^.* - [F,L]
 
-  <Location /challenging-proxy/oauth/authorize>
+  <Location /challenging-proxy/oauth>
     # Insert your backend server name/ip here.
-    ProxyPass https://openshift.example.com:8443/oauth/authorize
+    ProxyPass https://openshift.example.com:8443/oauth/
     AuthType Basic
     AuthBasicProvider PAM
     AuthPAMService openshift
-    Require valid-user
   </Location>
 
-  <ProxyMatch /oauth/authorize>
+  <Proxy /oauth>
     AuthName openshift
     RequestHeader set X-Remote-User %{REMOTE_USER}s env=REMOTE_USER
-  </ProxyMatch>
+    Require valid-user
+  </Proxy>
 </VirtualHost>
 
 RequestHeader unset X-Remote-User

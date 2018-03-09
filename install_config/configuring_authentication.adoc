@@ -965,15 +965,15 @@ LoadModule request_module modules/mod_request.so
   RewriteCond %{HTTP:X-Csrf-Token} ^$ [NC]
   RewriteRule ^.* - [F,L]
 
-  <Location /challenging-proxy/oauth/authorize>
+  <Location /challenging-proxy/oauth>
     # Insert your backend server name/ip here.
-    ProxyPass https://[MASTER]:8443/oauth/authorize
+    ProxyPass https://[MASTER]:8443/oauth/
     AuthType basic
   </Location>
 
-  <Location /login-proxy/oauth/authorize>
+  <Location /login-proxy/oauth>
     # Insert your backend server name/ip here.
-    ProxyPass https://[MASTER]:8443/oauth/authorize
+    ProxyPass https://[MASTER]:8443/oauth/
 
     # mod_auth_form providers are implemented by mod_authn_dbm, mod_authn_file,
     # mod_authn_dbd, mod_authnz_ldap and mod_authn_socache.
@@ -983,7 +983,7 @@ LoadModule request_module modules/mod_request.so
     ErrorDocument 401 /login.html
   </Location>
 
-  <ProxyMatch /oauth/authorize>
+  <Proxy /oauth>
     AuthUserFile /etc/origin/master/htpasswd
     AuthName openshift
     Require valid-user
@@ -1002,7 +1002,7 @@ LoadModule request_module modules/mod_request.so
     # yum install mod_auth_gssapi
     # AuthType GSSAPI
     # GssapiCredStore keytab:/etc/httpd.keytab
-  </ProxyMatch>
+  </Proxy>
 
 </VirtualHost>
 
